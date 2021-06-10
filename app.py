@@ -6,10 +6,10 @@ import os
 
 
 # import other .py files
-import ParhamFood_backend.handler.ManagerHandler as MH
-import ParhamFood_backend.handler.UserHandler as UH
-import ParhamFood_backend.handler.RestaurantHandler as RH
-import ParhamFood_backend.db as db
+import handler.ManagerHandler as MH
+import handler.UserHandler as UH
+import handler.RestaurantHandler as RH
+import db as db
 
 
 app = Flask(__name__)
@@ -42,12 +42,13 @@ def hello_world():
 # --------------------------------------------------------------------
 @socketio.on('create user')
 def handle_create_user(json):
-    response = UH.create(json)
+    # response = UH.create(json)
     # print('received my event: ' + str(json))
     # response = {
     #     "status_code" : "200"
     # }
-    socketio.emit('my response', response)
+    # socketio.emit('my response', response)
+    print(json)
 
 
 @socketio.on('test_server')
