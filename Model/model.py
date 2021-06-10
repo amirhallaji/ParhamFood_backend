@@ -1,9 +1,10 @@
 
 # User
 """
+    id as primary key
     name
     password
-    phone number as primary key
+    phone number
     region
     address
     credit
@@ -12,33 +13,36 @@
 
 # manager
 """
+    id as primary key
     name
-    email as primary key
+    email 
     password
 """
 
 # restaurant
 """
-    'manager' foreign key to manager email address
-    name as primary key
+    id as primary key
+    name 
     region
     address
-    serving regions
-    work hours
+    serving regions   "a text of regions with , between them"
+    work hours        "text with this format   open_hour:close_hour"
     delivery time
     delivery fee
+    'manager' foreign key to manager id
 """
 
 
 # food
 """
-    name as primary key
+    id as primary key 
+    name  unique
 """
 
 # relation between food and restaurant
 """
-    restaurant_name foreign key to restaurant name  }
-    food_name foreign key to food food name         } => both as primary key
+    restaurant_id foreign key to restaurant id  }
+    food_id foreign key to food, food id         } => both as primary key
     count
     copen_type = Default : None
     price
@@ -58,17 +62,10 @@
 # order
 """
     'order id' as primary key
-    user foreign key to user phone number
-    restaurant_name   foreign key to restaurant name
-    food_name  foreign key to food name
+    user_id foreign key to user id
+    restaurant_id   foreign key to id
+    food_id  foreign key to id
     count
     status
     date
-"""
-
-
-# order (for order history)
-"""
-    'user id'
-    
 """
