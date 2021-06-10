@@ -23,11 +23,12 @@ app.config.from_mapping(
 app.config.from_pyfile('config.py', silent=True)
 db.init_app(app)
 
-socketio = SocketIO(app)
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 
 @app.route("/")
 def hello_world():
+    handle_test()
     return "Hello World!"
 
 
@@ -47,6 +48,19 @@ def handle_create_user(json):
     #     "status_code" : "200"
     # }
     socketio.emit('my response', response)
+
+
+@socketio.on('test_server')
+def handle_test():
+    print('test function')
+    socketio.emit('test_client', 'amir')
+
+
+@socketio.on('message')
+def handle_test_msg(msg):
+    print('test msg function')
+    socketio.send(msg, broadcast=True)
+    return None
 
 
 @socketio.on('update user')
@@ -187,4 +201,4 @@ def handle_create_restaurant(json):
 
 
 if __name__ == '__main__':
-    socketio.run(app)
+    socketio.run(app, port=4001)
