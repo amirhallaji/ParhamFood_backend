@@ -6,10 +6,10 @@ import os
 
 
 # import other .py files
-import ParhamFood_backend.handler.ManagerHandler as MH
-import ParhamFood_backend.handler.UserHandler as UH
-import ParhamFood_backend.handler.RestaurantHandler as RH
-import ParhamFood_backend.db as db
+import handler.ManagerHandler as MH
+import handler.UserHandler as UH
+import handler.RestaurantHandler as RH
+import db as db
 
 
 app = Flask(__name__)

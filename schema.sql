@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS manager;
 DROP TABLE IF EXISTS food;
 DROP TABLE IF EXISTS restaurant;
 DROP TABLE IF EXISTS restaurant_food;
-DROP TABLE IF EXISTS order;
+DROP TABLE IF EXISTS f_order;
 DROP TABLE IF EXISTS comment;
 
 CREATE TABLE user (
@@ -62,7 +62,7 @@ CREATE TABLE restaurant_food (
     PRIMARY KEY (restaurant_id, food_id)
 );
 
-CREATE TABLE order (
+CREATE TABLE f_order (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER,
     restaurant_id INTEGER,
@@ -85,5 +85,5 @@ CREATE TABLE comment (
     content TEXT NOT NULL,
     manager_reply TEXT,
     FOREIGN KEY (order_id)
-           REFERENCES order(id)
+           REFERENCES f_order(id)
 );
