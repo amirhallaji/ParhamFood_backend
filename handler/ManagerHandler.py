@@ -7,6 +7,10 @@ def update(json):
     pass
 
 
+def get(json):
+    pass
+
+
 def addFood(json):
     pass
 

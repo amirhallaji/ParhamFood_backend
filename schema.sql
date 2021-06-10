@@ -32,3 +32,23 @@ CREATE TABLE restaurant (
   region TEXT NOT NULL,
   address TEXT NOT NULL
 );
+
+
+CREATE TABLE food (
+
+);
+
+
+CREATE TABLE comment (
+
+);
+
+
+CREATE TABLE reply (
+
+);
+
+
+CREATE TABLE _order (
+
+);
