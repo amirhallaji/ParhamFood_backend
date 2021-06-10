@@ -1,5 +1,5 @@
 
-from db import *
+from ParhamFood_backend.db import *
 from flask import flash
 
 
