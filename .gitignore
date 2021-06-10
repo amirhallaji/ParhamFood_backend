@@ -1,3 +1,2 @@
-__pycache__/
-.idea/
-/db.py
+__pycache__
+.idea
