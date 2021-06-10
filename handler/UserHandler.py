@@ -1,24 +1,24 @@
 
-def create():
+def create(json):
     pass
 
 
-def update():
+def update(json):
     pass
 
 
-def order():
+def order(json):
     pass
 
 
-def submitComment():
+def submitComment(json):
     pass
 
 
-def getFavoriteFoodList():
+def getFavoriteFoodsList(json):
     pass
 
 
-def getOrdersHistory():
+def getOrdersHistory(json):
     pass
 

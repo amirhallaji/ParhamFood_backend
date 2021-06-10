@@ -1,28 +1,28 @@
 
-def create():
+def create(json):
     pass
 
 
-def update():
+def update(json):
     pass
 
 
-def addFood():
+def addFood(json):
     pass
 
 
-def removeFood():
+def removeFood(json):
     pass
 
 
-def disableFood():
+def disableFood(json):
     pass
 
 
-def acceptOrder():
+def acceptOrder(json):
     pass
 
 
-def replyToComment():
+def replyToComment(json):
     pass
 
