@@ -79,11 +79,6 @@ CREATE TABLE order (
 );
 
 
-<<<<<<< HEAD
-CREATE TABLE order_ (
-
-);
-=======
 CREATE TABLE comment (
     order_id INTEGER PRIMARY KEY,
     score INTEGER NOT NULL,
@@ -92,4 +87,3 @@ CREATE TABLE comment (
     FOREIGN KEY (order_id)
            REFERENCES order(id)
 );
->>>>>>> f580807477131cef4423f65ecd8b35a9d18d0b51
