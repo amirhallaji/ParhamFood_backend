@@ -3,7 +3,7 @@
 """
     name
     password
-    phone number
+    phone number as primary key
     region
     address
     credit
@@ -13,14 +13,14 @@
 # manager
 """
     name
-    email
+    email as primary key
     password
 """
 
 # restaurant
 """
-    'manager id'
-    name
+    'manager' foreign key to manager email address
+    name as primary key
     region
     address
     serving regions
@@ -32,7 +32,15 @@
 
 # food
 """
-    name
+    name as primary key
+"""
+
+# relation between food and restaurant
+"""
+    restaurant_name foreign key to restaurant name  }
+    food_name foreign key to food food name         } => both as primary key
+    count
+    copen_type = Default : None
     price
     disabled = Default : False
 """
@@ -40,17 +48,22 @@
 
 # comment
 """
-    'user id'
-    'food id'
+    'order id' as foreign key to order_id and primary key
     score
     content
+    manager_reply
 """
 
 
-# reply
+# order
 """
-    'manager id'
-    content
+    'order id' as primary key
+    user foreign key to user phone number
+    restaurant_name   foreign key to restaurant name
+    food_name  foreign key to food name
+    count
+    status
+    date
 """
 
 
