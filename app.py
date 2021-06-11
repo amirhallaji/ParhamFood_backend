@@ -42,12 +42,13 @@ def hello_world():
 # --------------------------------------------------------------------
 @socketio.on('create user')
 def handle_create_user(json):
-    response = UH.create(json)
+    # response = UH.create(json)
     # print('received my event: ' + str(json))
     # response = {
     #     "status_code" : "200"
     # }
-    socketio.emit('my response', response)
+    # socketio.emit('my response', response)
+    print(json)
 
 
 @socketio.on('test_server')
