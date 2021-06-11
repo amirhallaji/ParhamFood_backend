@@ -55,10 +55,11 @@ def replyToComment(json):
 
 
 def is_manager_exist(email, cursor):
-    select_query = 'SELECT email FROM manager'
-    cursor.execute(select_query)
+    select_query = 'SELECT email FROM manager WHERE email = ?'
+    cursor.execute(select_query, (email,))
     emails = cursor.fetchall()
-    for e in emails:
-        if e[0] == email:
-            return True
+
+    if len(emails) == 0:
+        return True
+
     return False

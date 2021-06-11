@@ -56,10 +56,9 @@ def getOrdersHistory(json):
 
 
 def is_user_exist(phone_number, cursor):
-    select_query = 'SELECT phone_number FROM user'
-    cursor.execute(select_query)
+    select_query = 'SELECT phone_number FROM user WHERE phone_number = ?'
+    cursor.execute(select_query, (phone_number, ))
     phone_numbers = cursor.fetchall()
-    for phone in phone_numbers:
-        if phone[0] == phone_number:
-            return True
+    if phone_numbers == 0:
+        return True
     return False
