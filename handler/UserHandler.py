@@ -59,6 +59,6 @@ def is_user_exist(phone_number, cursor):
     select_query = 'SELECT phone_number FROM user WHERE phone_number = ?'
     cursor.execute(select_query, (phone_number, ))
     phone_numbers = cursor.fetchall()
-    if phone_numbers == 0:
+    if len(phone_numbers) == 0:
         return True
     return False
