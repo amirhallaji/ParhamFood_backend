@@ -1,34 +1,34 @@
-
 from db import *
 from flask import flash
 
 
 def create(json):
-    phone_number    = json["phone_number"]
-    password        = json["password"]
-    name            = json["name"]
-    region          = json["region"]
-    address         = json["address"]
-    credit          = 1000000               # 1,000,000
+    phone_number = json["phone_number"]
+    password = json["password"]
+    name = json["name"]
+    region = json["region"]
+    address = json["address"]
+    credit = 1000000  # 1,000,000
 
-    db = get_db()
-    error = None
+    insert_query = 'INSERT INTO user (phone_number, password, name, region, address, credit) ' \
+                   'VALUES (?, ?, ?, ?, ?, ?)'
+    fields = (phone_number, password, name, region, address, credit)
 
-    if phone_number is None:
-        error = 'Phone Number is required.'
-    elif password is None:
-        error = 'Password is required.'
+    response = ""
+    cursor = get_db().cursor()
 
-    if error is not None:
-        flash(error)
-    else:
-        db = get_db()
-        db.execute(
-            'INSERT INTO user (phone_number, password, name, region, address, credit)'
-            ' VALUES (?, ?, ?, ?, ?, ?)',
-            (phone_number, password, name, region, address, credit)
-        )
-        db.commit()
+    try:
+        # checking to find out user not repetitive
+        if is_user_exist(phone_number, cursor):
+            response = "USER ALREADY EXISTS !!!"
+
+        # insert user
+        cursor.execute(insert_query, fields)
+        cursor.commit()
+        response = "User registered successfully"
+
+    except sqlite3.Error:  # I'm not sure the exact error that's raised by SQLite
+        response = "WE HAVE A PROBLEM IN DATABASE FOR USER REGISTRATION"
 
 
 def update(json):
@@ -54,3 +54,12 @@ def getFavoriteFoodsList(json):
 def getOrdersHistory(json):
     pass
 
+
+def is_user_exist(phone_number, cursor):
+    select_query = 'SELECT phone_number FROM user'
+    cursor.execute(select_query)
+    phone_numbers = cursor.fetchall()
+    for phone in phone_numbers:
+        if phone[0] == phone_number:
+            return True
+    return False
