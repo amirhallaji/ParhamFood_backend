@@ -49,7 +49,7 @@ CREATE TABLE restaurant_food (
     restaurant_name TEXT,
     food_id INTEGER,
     count INTEGER NOT NULL,
-    copen TEXT NOT NULL DEFAULT "none",
+    copen_type TEXT NOT NULL DEFAULT "none",
     price REAL NOT NULL,
     disabled INTEGER NOT NULL DEFAULT 0,
     FOREIGN KEY (restaurant_name)

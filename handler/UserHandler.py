@@ -21,6 +21,7 @@ def create(json):
         # checking to find out user not repetitive
         if is_user_exist(phone_number, cursor):
             response = "USER ALREADY EXISTS !!!"
+            return
 
         # insert user
         cursor.execute(insert_query, fields)
@@ -32,7 +33,34 @@ def create(json):
 
 
 def update(json):
-    pass
+    phone_number = json["phone_number"]
+    password = json["password"]
+    name = json["name"]
+    region = json["region"]
+    address = json["address"]
+    credit = json["credit"]
+
+    update_query = 'UPDATE user SET password=?, name=?, region=?, address=?, credit=? ' \
+                   'WHERE phone_number=?'
+    fields = (password, name, region, address, credit, phone_number)
+
+    response = ""
+    cursor = get_db().cursor()
+
+    try:
+        # checking to find out user not repetitive
+        if not is_user_exist(phone_number, cursor):
+            response = "USER NOT EXISTS !!!"
+            return
+
+        # insert user
+        cursor.execute(update_query, fields)
+        cursor.commit()
+        response = "User updated successfully"
+
+    except sqlite3.Error:  # I'm not sure the exact error that's raised by SQLite
+        response = "WE HAVE A PROBLEM IN DATABASE FOR USER UPDATE DATA"
+
 
 
 def get(json):

@@ -27,7 +27,28 @@ def create(json):
 
 
 def update(json):
-    pass
+    email = json["email"]
+    password = json["password"]
+    name = json["name"]
+
+    query = 'UPDATE manager SET password=?, name=? ' \
+            'WHERE email=?'
+    fields = (password, name, email)
+
+    response = ""
+    cursor = get_db().cursor()
+
+    try:
+        if not is_manager_exist(email, cursor):
+            response = "MANAGER NOT EXISTS!"
+            return
+
+        cursor.execute(query, fields)
+        cursor.commit()
+        response = "Manager updated successfully"
+
+    except sqlite3.IntegrityError:  # I'm not sure the exact error that's raised by SQLite
+        response = "A PROBLEM ACCRUED IN MANAGER UPDATE"
 
 
 def get(json):
