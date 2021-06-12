@@ -3,10 +3,10 @@ import json
 from db import *
 
 
-def create(json):
-    email = json["email"]
-    password = json["password"]
-    name = json["name"]
+def create(json_fields):
+    email = json_fields["email"]
+    password = json_fields["password"]
+    name = json_fields["name"]
 
     query = 'INSERT INTO manager (email, password, name) ' \
             'VALUES (?, ?, ?)'
@@ -30,10 +30,10 @@ def create(json):
         response = "A PROBLEM ACCRUED IN MANAGER CREATION"
 
 
-def update(json):
-    email = json["email"]
-    password = json["password"]
-    name = json["name"]
+def update(json_fields):
+    email = json_fields["email"]
+    password = json_fields["password"]
+    name = json_fields["name"]
 
     query = 'UPDATE manager SET password=?, name=? ' \
             'WHERE email=?'
