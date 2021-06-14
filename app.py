@@ -3,6 +3,7 @@ from flask import Flask
 from flask_socketio import SocketIO
 from markupsafe import escape
 import os
+import json
 
 
 # import other .py files
@@ -27,9 +28,18 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 
 
 @app.route("/")
-def hello_world():
-    handle_test()
-    return "Hello World!"
+def sayHello():
+    return 'Hello!'
+
+@app.route("/create")
+def createUser():
+    res = handle_create_user()
+    return res
+
+@app.route("/get")
+def getUser():
+    res = handle_get_user()
+    return res
 
 
 # @app.route("/<name>")
@@ -41,14 +51,27 @@ def hello_world():
 #                           USER EVENTS
 # --------------------------------------------------------------------
 @socketio.on('create user')
-def handle_create_user(json):
-    # response = UH.create(json)
-    # print('received my event: ' + str(json))
+def handle_create_user():
+
+    dictt = {
+        'phone_number': '333',
+        'password' : '123@',
+        'name' : 'ali',
+        'region' : '1',
+        'address' : 'velenjak',
+    }
+
+    json_req = json.dumps(dictt)
+
+    response = UH.create(json_req)
+    # print('received my event: ' + str(json_req))
     # response = {
     #     "status_code" : "200"
     # }
     # socketio.emit('my response', response)
-    print(json)
+    print(response)
+
+    return response
 
 
 @socketio.on('test_server')
@@ -65,19 +88,40 @@ def handle_test_msg(msg):
 
 
 @socketio.on('update user')
-def handle_update_user(json):
-    response = UH.update(json)
-    # print('received my event: ' + str(json))
+def handle_update_user(json_req):
+    response = UH.update(json_req)
+    # print('received my event: ' + str(json_req))
     # response = {
     #     "status_code" : "200"
     # }
     socketio.emit('my response', response)
 
 
+@socketio.on('update user')
+def handle_get_user():
+
+    dictt = {
+        'phone_number': '333',
+        'password': '123@'
+    }
+
+    json_req = json.dumps(dictt)
+
+    response = UH.get(json_req)
+    # print('received my event: ' + str(json_req))
+    # response = {
+    #     "status_code" : "200"
+    # }
+    # socketio.emit('my response', response)
+    print(response)
+
+    return response
+
+
 @socketio.on('make order')
-def handle_make_order(json):
-    response = UH.order(json)
-    # print('received my event: ' + str(json))
+def handle_make_order(json_req):
+    response = UH.order(json_req)
+    # print('received my event: ' + str(json_req))
     # response = {
     #     "status_code" : "200"
     # }
@@ -85,9 +129,9 @@ def handle_make_order(json):
 
 
 @socketio.on('submit comment')
-def handle_submit_comment(json):
-    response = UH.submitComment(json)
-    # print('received my event: ' + str(json))
+def handle_submit_comment(json_req):
+    response = UH.submitComment(json_req)
+    # print('received my event: ' + str(json_req))
     # response = {
     #     "status_code" : "200"
     # }
@@ -95,9 +139,9 @@ def handle_submit_comment(json):
 
 
 @socketio.on('get favorite foods list')
-def handle_get_favorite_foods_list(json):
-    response = UH.getFavoriteFoodsList(json)
-    # print('received my event: ' + str(json))
+def handle_get_favorite_foods_list(json_req):
+    response = UH.getFavoriteFoodsList(json_req)
+    # print('received my event: ' + str(json_req))
     # response = {
     #     "status_code" : "200"
     # }
@@ -105,9 +149,9 @@ def handle_get_favorite_foods_list(json):
 
 
 @socketio.on('get orders history')
-def handle_get_orders_history(json):
-    response = UH.getOrdersHistory(json)
-    # print('received my event: ' + str(json))
+def handle_get_orders_history(json_req):
+    response = UH.getOrdersHistory(json_req)
+    # print('received my event: ' + str(json_req))
     # response = {
     #     "status_code" : "200"
     # }
@@ -119,9 +163,9 @@ def handle_get_orders_history(json):
 #                           MANAGER EVENTS
 # --------------------------------------------------------------------
 @socketio.on('create manager')
-def handle_create_manager(json):
-    response = MH.create(json)
-    # print('received my event: ' + str(json))
+def handle_create_manager(json_req):
+    response = MH.create(json_req)
+    # print('received my event: ' + str(json_req))
     # response = {
     #     "status_code" : "200"
     # }
@@ -129,9 +173,9 @@ def handle_create_manager(json):
 
 
 @socketio.on('update manager')
-def handle_update_manager(json):
-    response = MH.update(json)
-    # print('received my event: ' + str(json))
+def handle_update_manager(json_req):
+    response = MH.update(json_req)
+    # print('received my event: ' + str(json_req))
     # response = {
     #     "status_code" : "200"
     # }
@@ -139,9 +183,9 @@ def handle_update_manager(json):
 
 
 @socketio.on('add food')
-def handle_add_food(json):
-    response = MH.addFood(json)
-    # print('received my event: ' + str(json))
+def handle_add_food(json_req):
+    response = MH.addFood(json_req)
+    # print('received my event: ' + str(json_req))
     # response = {
     #     "status_code" : "200"
     # }
@@ -149,9 +193,9 @@ def handle_add_food(json):
 
 
 @socketio.on('remove food')
-def handle_remove_food(json):
-    response = MH.removeFood(json)
-    # print('received my event: ' + str(json))
+def handle_remove_food(json_req):
+    response = MH.removeFood(json_req)
+    # print('received my event: ' + str(json_req))
     # response = {
     #     "status_code" : "200"
     # }
@@ -159,9 +203,9 @@ def handle_remove_food(json):
 
 
 @socketio.on('disable food')
-def handle_disable_food(json):
-    response = MH.disableFood(json)
-    # print('received my event: ' + str(json))
+def handle_disable_food(json_req):
+    response = MH.disableFood(json_req)
+    # print('received my event: ' + str(json_req))
     # response = {
     #     "status_code" : "200"
     # }
@@ -169,9 +213,9 @@ def handle_disable_food(json):
 
 
 @socketio.on('accept order')
-def handle_accept_order(json):
-    response = MH.acceptOrder(json)
-    # print('received my event: ' + str(json))
+def handle_accept_order(json_req):
+    response = MH.acceptOrder(json_req)
+    # print('received my event: ' + str(json_req))
     # response = {
     #     "status_code" : "200"
     # }
@@ -179,9 +223,9 @@ def handle_accept_order(json):
 
 
 @socketio.on('reply to comment')
-def handle_reply_to_comment(json):
-    response = MH.replyToComment(json)
-    # print('received my event: ' + str(json))
+def handle_reply_to_comment(json_req):
+    response = MH.replyToComment(json_req)
+    # print('received my event: ' + str(json_req))
     # response = {
     #     "status_code" : "200"
     # }
@@ -192,9 +236,9 @@ def handle_reply_to_comment(json):
 #                           RESTAURANT EVENTS
 # --------------------------------------------------------------------
 @socketio.on('create restaurant')
-def handle_create_restaurant(json):
-    response = RH.create(json)
-    # print('received my event: ' + str(json))
+def handle_create_restaurant(json_req):
+    response = RH.create(json_req)
+    # print('received my event: ' + str(json_req))
     # response = {
     #     "status_code" : "200"
     # }

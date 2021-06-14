@@ -3,7 +3,10 @@ import json
 from db import *
 
 
-def create(json_fields):
+def create(json_str):
+
+    json_fields = json.loads(json_str)
+
     phone_number = json_fields["phone_number"]
     password = json_fields["password"]
     name = json_fields["name"]
@@ -16,26 +19,34 @@ def create(json_fields):
     fields = (phone_number, password, name, region, address, credit)
 
     response = ""
-    cursor = get_db().cursor()
+    db = get_db()
+
+    cursor = db.cursor()
 
     try:
+
         # checking to find out user not repetitive
         if len(get_user_by_phone(phone_number, cursor)) != 0:
             response = "USER ALREADY EXISTS !!!"
-            return
+            return 'Error'
 
         # insert user
         cursor.execute(insert_query, fields)
-        cursor.commit()
+        db.commit()
         close_db()
         response = "User registered successfully"
+        return response
 
     except sqlite3.Error:  # I'm not sure the exact error that's raised by SQLite
         close_db()
         response = "WE HAVE A PROBLEM IN DATABASE FOR USER REGISTRATION"
+        return response
 
 
-def update(json_fields):
+def update(json_str):
+
+    json_fields = json.loads(json_str)
+
     phone_number = json_fields["phone_number"]
     password = json_fields["password"]
     name = json_fields["name"]
@@ -67,7 +78,10 @@ def update(json_fields):
         response = "WE HAVE A PROBLEM IN DATABASE FOR USER UPDATE DATA"
 
 
-def get(json_fields):
+def get(json_str):
+
+    json_fields = json.loads(json_str)
+
     entered_phone_num = json_fields["phone_number"]
     entered_pass = json_fields["password"]
     response = ""
@@ -83,7 +97,7 @@ def get(json_fields):
 
         if user_row["password"] != entered_pass :
             response = "INCORRECT PASSWORD"
-            return
+            return response
 
         user_row_dict = dict(user_row)
         del user_row_dict["phone_number"]
@@ -93,7 +107,7 @@ def get(json_fields):
 
     except sqlite3.Error:
         response = "WE HAVE A PROBLEM IN DATABASE FOR USER GET DATA"
-        return
+        return response
 
 
 def order(json):
@@ -113,7 +127,8 @@ def getOrdersHistory(json):
 
 
 def get_user_by_phone(phone_number, cursor):
-    select_query = 'SELECT * FROM user WHERE phone_number = ?'
+    select_query = 'SELECT * FROM user WHERE phone_number=?'
     cursor.execute(select_query, (phone_number, ))
     users = cursor.fetchall()
+    print('users : ' + str(users))
     return users
