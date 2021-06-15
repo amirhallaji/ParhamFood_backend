@@ -46,22 +46,35 @@ def getUser():
 # def hello(name):
 #     return f"Hello, {escape(name)}!"
 
+# --------------------------------------------------------------------
+#                           TEST
+# --------------------------------------------------------------------
+
+@socketio.on('give me user name')
+def handle_testtt():
+    print('message received')
+    socketio.emit('get user name', 'alireza mohammadi')
+    print('message sent')
 
 # --------------------------------------------------------------------
 #                           USER EVENTS
 # --------------------------------------------------------------------
 @socketio.on('create user')
-def handle_create_user():
+def handle_create_user(json_req):
 
-    dictt = {
-        'phone_number': '333',
-        'password' : '123@',
-        'name' : 'ali',
-        'region' : '1',
-        'address' : 'velenjak',
-    }
+    print(json_req)
+    return
 
-    json_req = json.dumps(dictt)
+    # dictt = {
+    #     'phone_number': '333',
+    #     'password' : '123@',
+    #     'name' : 'ali',
+    #     'region' : '1',
+    #     'address' : 'velenjak',
+    # }
+
+    json_req = ''
+    # json_req = json.dumps(dictt)
 
     response = UH.create(json_req)
     # print('received my event: ' + str(json_req))
@@ -69,7 +82,7 @@ def handle_create_user():
     #     "status_code" : "200"
     # }
     # socketio.emit('my response', response)
-    print(response)
+    # print(response)
 
     return response
 
@@ -77,6 +90,7 @@ def handle_create_user():
 @socketio.on('test_server')
 def handle_test():
     print('test function')
+    socketio.send('message', 'amir')
     socketio.emit('test_client', 'amir')
 
 
@@ -97,15 +111,16 @@ def handle_update_user(json_req):
     socketio.emit('my response', response)
 
 
-@socketio.on('update user')
+@socketio.on('get user')
 def handle_get_user():
 
-    dictt = {
-        'phone_number': '333',
-        'password': '123@'
-    }
+    # dictt = {
+    #     'phone_number': '333',
+    #     'password': '123@'
+    # }
 
-    json_req = json.dumps(dictt)
+    json_req = ''
+    # json_req = json.dumps(dictt)
 
     response = UH.get(json_req)
     # print('received my event: ' + str(json_req))
@@ -113,13 +128,21 @@ def handle_get_user():
     #     "status_code" : "200"
     # }
     # socketio.emit('my response', response)
-    print(response)
+    # print(response)
 
     return response
 
 
 @socketio.on('make order')
 def handle_make_order(json_req):
+
+    """
+        phone_number
+        restaurant_name
+        food
+        count
+    """
+
     response = UH.order(json_req)
     # print('received my event: ' + str(json_req))
     # response = {
@@ -175,6 +198,16 @@ def handle_create_manager(json_req):
 @socketio.on('update manager')
 def handle_update_manager(json_req):
     response = MH.update(json_req)
+    # print('received my event: ' + str(json_req))
+    # response = {
+    #     "status_code" : "200"
+    # }
+    socketio.emit('my response', response)
+
+
+@socketio.on('get manager')
+def handle_get_manager(json_req):
+    response = MH.get(json_req)
     # print('received my event: ' + str(json_req))
     # response = {
     #     "status_code" : "200"
