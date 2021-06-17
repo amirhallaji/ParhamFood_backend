@@ -59,7 +59,8 @@ def update(json_str):
     fields = (password, name, region, address, credit, phone_number)
 
     response = ""
-    cursor = get_db().cursor()
+    db = get_db()
+    cursor = db.cursor()
 
     try:
         # checking to find out user not repetitive
@@ -69,7 +70,7 @@ def update(json_str):
 
         # insert user
         cursor.execute(update_query, fields)
-        cursor.commit()
+        db.commit()
         close_db()
         response = "User updated successfully"
 
@@ -83,7 +84,6 @@ def get(json_str):
     json_fields = json.loads(json_str)
 
     entered_phone_num = json_fields["phone_number"]
-    entered_pass = json_fields["password"]
     response = ""
     db = get_db()
     db.row_factory = sqlite3.Row
@@ -95,17 +95,13 @@ def get(json_str):
             response = "USER NOT EXIST !!!!"
         user_row = user_rows[0]
 
-        if user_row["password"] != entered_pass :
-            response = "INCORRECT PASSWORD"
-            return response
-
         user_row_dict = dict(user_row)
-        del user_row_dict["phone_number"]
-        del user_row_dict["password"]
+        close_db()
 
         return json.dumps(user_row_dict)
 
     except sqlite3.Error:
+        close_db()
         response = "WE HAVE A PROBLEM IN DATABASE FOR USER GET DATA"
         return response
 

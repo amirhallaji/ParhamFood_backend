@@ -13,7 +13,8 @@ def create(json_fields):
     fields = (email, password, name)
 
     response = ""
-    cursor = get_db().cursor()
+    db = get_db()
+    cursor = db.cursor()
 
     try:
         if len(get_manager_by_email(email, cursor)) != 0:
@@ -21,7 +22,7 @@ def create(json_fields):
             return
 
         cursor.execute(query, fields)
-        cursor.commit()
+        db.commit()
         close_db()
         response = "Manager registered successfully"
 
@@ -40,7 +41,8 @@ def update(json_fields):
     fields = (password, name, email)
 
     response = ""
-    cursor = get_db().cursor()
+    db = get_db()
+    cursor = db.cursor()
 
     try:
         if len(get_manager_by_email(email, cursor)) == 0:
@@ -48,7 +50,7 @@ def update(json_fields):
             return
 
         cursor.execute(query, fields)
-        cursor.commit()
+        db.commit()
         close_db()
         response = "Manager updated successfully"
 
@@ -71,17 +73,13 @@ def get(json_fields):
             response = "MANAGER NOT EXIST !!!!"
         manager_row = manager_rows[0]
 
-        if manager_row["password"] != entered_pass:
-            response = "INCORRECT PASSWORD"
-            return
-
         manager_row_dict = dict(manager_row)
-        del manager_row_dict["email"]
-        del manager_row_dict["password"]
 
+        close_db()
         return json.dumps(manager_row_dict)
 
     except sqlite3.Error:
+        close_db()
         response = "WE HAVE A PROBLEM IN DATABASE FOR MANAGER GET DATA"
         return
 
