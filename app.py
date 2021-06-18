@@ -153,7 +153,7 @@ def handle_make_order(json_req):
 
 @socketio.on('submit comment')
 def handle_submit_comment(json_req):
-    response = UH.submitComment(json_req)
+    response = UH.submit_comment(json_req)
     # print('received my event: ' + str(json_req))
     # response = {
     #     "status_code" : "200"
@@ -163,7 +163,7 @@ def handle_submit_comment(json_req):
 
 @socketio.on('get favorite foods list')
 def handle_get_favorite_foods_list(json_req):
-    response = UH.getFavoriteFoodsList(json_req)
+    response = UH.get_favorite_foods_list(json_req)
     # print('received my event: ' + str(json_req))
     # response = {
     #     "status_code" : "200"
@@ -173,7 +173,7 @@ def handle_get_favorite_foods_list(json_req):
 
 @socketio.on('get orders history')
 def handle_get_orders_history(json_req):
-    response = UH.getOrdersHistory(json_req)
+    response = UH.get_orders_history(json_req)
     # print('received my event: ' + str(json_req))
     # response = {
     #     "status_code" : "200"

@@ -3,7 +3,9 @@ import json
 from db import *
 
 
-def create(json_fields):
+def create(json_str):
+    json_fields = json.loads(json_str)
+
     email = json_fields["email"]
     password = json_fields["password"]
     name = json_fields["name"]
@@ -31,7 +33,9 @@ def create(json_fields):
         response = "A PROBLEM ACCRUED IN MANAGER CREATION"
 
 
-def update(json_fields):
+def update(json_str):
+    json_fields = json.loads(json_str)
+
     email = json_fields["email"]
     password = json_fields["password"]
     name = json_fields["name"]
@@ -59,7 +63,9 @@ def update(json_fields):
         response = "A PROBLEM ACCRUED IN MANAGER UPDATE"
 
 
-def get(json_fields):
+def get(json_str):
+    json_fields = json.loads(json_str)
+
     entered_email = json_fields["email"]
     entered_pass = json_fields["password"]
     response = ""

@@ -4,7 +4,6 @@ from db import *
 
 
 def create(json_str):
-
     json_fields = json.loads(json_str)
 
     phone_number = json_fields["phone_number"]
@@ -44,7 +43,6 @@ def create(json_str):
 
 
 def update(json_str):
-
     json_fields = json.loads(json_str)
 
     phone_number = json_fields["phone_number"]
@@ -80,7 +78,6 @@ def update(json_str):
 
 
 def get(json_str):
-
     json_fields = json.loads(json_str)
 
     entered_phone_num = json_fields["phone_number"]
@@ -106,25 +103,111 @@ def get(json_str):
         return response
 
 
-def order(json):
-    pass
+def order(json_str):
+    json_fields = json.loads(json_str)
+    user_phone_number = json_fields["phone_number"]
+    restaurant_name = json_fields["restaurant"]
+    food_name = json_fields["food"]
+    count = json_fields["count"]
+
+    response = ""
+    db = get_db()
+    cursor = db.cursor()
+
+    try:
+        cursor.execute("SELECT id FROM food WHERE name=?", (food_name,))
+        food_id = cursor.fetchone()[0]
+
+        insert_query = 'INSERT INTO f_order(user_phone, restaurant_name, food_id, count) VALUES (?,?,?,?)'
+
+        cursor.execute(insert_query, (user_phone_number, restaurant_name, food_id, count))
+        db.commit()
+
+        close_db()
+
+        response = "order registered successfully"
+        return response
+    except sqlite3.Error:
+        close_db()
+        response = "WE HAVE A PROBLEM IN DATABASE FOR ORDER REGISTRATION"
+        return response
 
 
-def submitComment(json):
-    pass
+def submit_comment(json_str):
+    json_fields = json.loads(json_str)
+    order_id = json_fields["order_id"]
+    score = json_fields["score"]
+    content = json_fields["content"]
+
+    response = ""
+    db = get_db()
+    cursor = db.cursor()
+
+    try:
+        cursor.execute('INSERT INTO comment(order_id, score, content) VALUES (?,?,?)', (order_id, score, content))
+        db.commit()
+
+        close_db()
+        response = "comment registered successfully"
+        return response
+    except sqlite3.Error:
+        close_db()
+        response = "WE HAVE A PROBLEM IN DATABASE FOR COMMENT REGISTRATION"
+        return response
 
 
-def getFavoriteFoodsList(json):
-    pass
+def get_favorite_foods_list(json_str):
+    json_fields = json.loads(json_str)
+    user_phone_number = json_fields["phone_number"]
+
+    get_favorites_query = 'SELECT food.name, f_order.restaurant_name FROM' \
+                          'comment INNER JOIN f_order ON comment.order_id = f_order.id' \
+                          'INNER JOIN food ON f_order.food_id = food.id' \
+                          'WHERE user_phone=?' \
+                          'GROUP BY food.name, f_order.restaurant_name' \
+                          'HAVING AVG(comment.score) > 3 OR COUNT(*) > 5'
+    response = ""
+    db = get_db()
+    cursor = db.cursor()
+
+    try:
+        cursor.execute(get_favorites_query, (user_phone_number,))
+        favorites_list = cursor.fetchall()
+
+        close_db()
+    except sqlite3.Error:
+        close_db()
+        response = "WE HAVE A PROBLEM IN GET FAVORITES LIST"
+        return response
 
 
-def getOrdersHistory(json):
-    pass
+def get_orders_history(json_str):
+    json_fields = json.loads(json_str)
+    user_phone_number = json_fields["phone_number"]
+
+    order_select_query = 'SELECT f_order.id, food.name, f_order.restaurant_name, f_order.count, f_order.status, ' \
+                         'f_order.date' \
+                         'FROM f_order INNER JOIN BY food ON f_order.food_id=food.id' \
+                         'WHERE user_phone = ?'
+    response = ""
+    db = get_db()
+    cursor = db.cursor()
+
+    try:
+        cursor.execute(order_select_query, (user_phone_number,))
+        order_list = cursor.fetchall()
+
+        close_db()
+
+    except sqlite3.Error:
+        close_db()
+        response = "WE HAVE A PROBLEM IN GET ORDERS LIST"
+        return response
 
 
 def get_user_by_phone(phone_number, cursor):
     select_query = 'SELECT * FROM user WHERE phone_number=?'
-    cursor.execute(select_query, (phone_number, ))
+    cursor.execute(select_query, (phone_number,))
     users = cursor.fetchall()
     print('users : ' + str(users))
     return users
