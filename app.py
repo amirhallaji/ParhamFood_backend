@@ -207,7 +207,7 @@ def handle_update_manager(json_req):
 
 @socketio.on('get manager')
 def handle_get_manager(json_req):
-    response = MH.get(json_req)
+    response = MH.get_by_email(json_req)
     # print('received my event: ' + str(json_req))
     # response = {
     #     "status_code" : "200"

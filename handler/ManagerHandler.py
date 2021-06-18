@@ -63,11 +63,10 @@ def update(json_str):
         response = "A PROBLEM ACCRUED IN MANAGER UPDATE"
 
 
-def get(json_str):
+def get_by_email(json_str):
     json_fields = json.loads(json_str)
 
     entered_email = json_fields["email"]
-    entered_pass = json_fields["password"]
     response = ""
     db = get_db()
     db.row_factory = sqlite3.Row
@@ -88,6 +87,36 @@ def get(json_str):
         close_db()
         response = "WE HAVE A PROBLEM IN DATABASE FOR MANAGER GET DATA"
         return
+
+
+def get_related_comments(json_str):
+    json_fields = json.loads(json_str)
+
+    email = json_fields["email"]
+
+    query = 'SELECT score, content, manager_reply FROM comment INNER JOIN f_order' \
+            'ON f_order.id = comment.order_id INNER JOIN restaurant' \
+            'ON restaurant_food.restaurant_name = restaurant.name' \
+            ' WHERE restaurant.manager_email=?'
+    fields = (email,)
+
+    response = ""
+    db = get_db()
+
+    cursor = db.cursor()
+
+    try:
+
+        cursor.execute(query, fields)
+
+        comments = cursor.fetchall()
+
+        close_db()
+
+    except sqlite3.Error:
+        close_db()
+        response = "WE HAVE A PROBLEM IN DATABASE FOR COMMENT GETTING BY MANAGER email"
+        return response
 
 
 def addFood(json):

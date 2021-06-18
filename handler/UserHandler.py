@@ -133,29 +133,6 @@ def order(json_str):
         return response
 
 
-def submit_comment(json_str):
-    json_fields = json.loads(json_str)
-    order_id = json_fields["order_id"]
-    score = json_fields["score"]
-    content = json_fields["content"]
-
-    response = ""
-    db = get_db()
-    cursor = db.cursor()
-
-    try:
-        cursor.execute('INSERT INTO comment(order_id, score, content) VALUES (?,?,?)', (order_id, score, content))
-        db.commit()
-
-        close_db()
-        response = "comment registered successfully"
-        return response
-    except sqlite3.Error:
-        close_db()
-        response = "WE HAVE A PROBLEM IN DATABASE FOR COMMENT REGISTRATION"
-        return response
-
-
 def get_favorite_foods_list(json_str):
     json_fields = json.loads(json_str)
     user_phone_number = json_fields["phone_number"]
