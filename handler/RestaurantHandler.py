@@ -102,6 +102,33 @@ def get_restaurant_by_name(json_str):
         return response
 
 
+def get_restaurant_by_region(json_str):
+    json_fields = json.loads(json_str)
+
+    region = json_fields["region"]
+
+    query = 'SELECT * FROM restaurant WHERE region=?'
+    fields = (region,)
+
+    response = ""
+    db = get_db()
+
+    cursor = db.cursor()
+
+    try:
+
+        cursor.execute(query, fields)
+
+        restaurants = cursor.fetchall()
+        close_db()
+
+
+    except sqlite3.Error:
+        close_db()
+        response = "WE HAVE A PROBLEM IN DATABASE FOR RESTAURANT GETTING"
+        return response
+
+
 def delete(json_str):
     json_fields = json.loads(json_str)
     restaurant_name = json_fields["restaurant_name"]
