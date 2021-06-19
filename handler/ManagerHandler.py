@@ -131,12 +131,12 @@ def disableFood(json):
     pass
 
 
-def acceptOrder(json):
-    pass
+#def acceptOrder(json):
+#    pass
 
 
-def replyToComment(json):
-    pass
+#def replyToComment(json):
+ #   pass
 
 
 def get_manager_by_email(email, cursor):

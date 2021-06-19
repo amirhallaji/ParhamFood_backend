@@ -25,7 +25,7 @@ def create(json_str):
     try:
 
         # checking to find out user not repetitive
-        if len(get_user_by_phone(phone_number, cursor)) != 0:
+        if len(get_user_by_phone_cursor(phone_number, cursor)) != 0:
             response = "USER ALREADY EXISTS !!!"
             return 'Error'
 
@@ -62,7 +62,7 @@ def update(json_str):
 
     try:
         # checking to find out user not repetitive
-        if len(get_user_by_phone(phone_number, cursor)) == 0:
+        if len(get_user_by_phone_cursor(phone_number, cursor)) == 0:
             response = "USER NOT EXISTS !!!"
             return
 
@@ -77,7 +77,34 @@ def update(json_str):
         response = "WE HAVE A PROBLEM IN DATABASE FOR USER UPDATE DATA"
 
 
-def get(json_str):
+def delete(json_str):
+    json_fields = json.loads(json_str)
+    phone_number = json_fields["phone_number"]
+
+    query = 'DELETE user WHERE phone_number=?'
+    fields = (phone_number,)
+
+    response = ""
+    db = get_db()
+
+    cursor = db.cursor()
+
+    try:
+
+        cursor.execute(query, fields)
+        db.commit()
+        close_db()
+
+        response = "User deleted successfully"
+        return response
+
+    except sqlite3.Error:
+        close_db()
+        response = "WE HAVE A PROBLEM IN DATABASE FOR DELETE USER"
+        return response
+
+
+def get_user_by_phone(json_str):
     json_fields = json.loads(json_str)
 
     entered_phone_num = json_fields["phone_number"]
@@ -87,7 +114,7 @@ def get(json_str):
     cursor = db.cursor()
 
     try:
-        user_rows = get_user_by_phone(entered_phone_num, cursor)
+        user_rows = get_user_by_phone_cursor(entered_phone_num, cursor)
         if len(user_rows) == 0:
             response = "USER NOT EXIST !!!!"
         user_row = user_rows[0]
@@ -103,7 +130,7 @@ def get(json_str):
         return response
 
 
-def order(json_str):
+def submit_order(json_str):
     json_fields = json.loads(json_str)
     user_phone_number = json_fields["phone_number"]
     restaurant_name = json_fields["restaurant"]
@@ -152,6 +179,7 @@ def get_favorite_foods_list(json_str):
         favorites_list = cursor.fetchall()
 
         close_db()
+
     except sqlite3.Error:
         close_db()
         response = "WE HAVE A PROBLEM IN GET FAVORITES LIST"
@@ -182,7 +210,7 @@ def get_orders_history(json_str):
         return response
 
 
-def get_user_by_phone(phone_number, cursor):
+def get_user_by_phone_cursor(phone_number, cursor):
     select_query = 'SELECT * FROM user WHERE phone_number=?'
     cursor.execute(select_query, (phone_number,))
     users = cursor.fetchall()

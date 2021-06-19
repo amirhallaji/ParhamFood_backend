@@ -27,13 +27,13 @@ CREATE TABLE manager (
 
 CREATE TABLE restaurant (
   name TEXT PRIMARY KEY,
+  manager_email TEXT,
   region TEXT NOT NULL,
   address TEXT NOT NULL,
   serving_regions TEXT NOT NULL,
   work_hours TEXT NOT NULL,
   delivery_time REAL NOT NULL,
   delivery_fee REAL NOT NULL,
-  manager_email TEXT,
   FOREIGN KEY (manager_email)
            REFERENCES manager(email)
 );
@@ -41,7 +41,7 @@ CREATE TABLE restaurant (
 
 CREATE TABLE food (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT UNIQUE NOT NULL
+    name TEXT NOT NULL
 );
 
 

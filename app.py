@@ -122,7 +122,7 @@ def handle_get_user():
     json_req = ''
     # json_req = json.dumps(dictt)
 
-    response = UH.get(json_req)
+    response = UH.get_user_by_phone(json_req)
     # print('received my event: ' + str(json_req))
     # response = {
     #     "status_code" : "200"
@@ -143,7 +143,7 @@ def handle_make_order(json_req):
         count
     """
 
-    response = UH.order(json_req)
+    response = UH.submit_order(json_req)
     # print('received my event: ' + str(json_req))
     # response = {
     #     "status_code" : "200"
