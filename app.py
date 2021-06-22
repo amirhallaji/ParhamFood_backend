@@ -36,10 +36,13 @@ def createUser():
     res = handle_create_user()
     return res
 
-@app.route("/get")
-def getUser():
-    res = handle_get_user()
-    return res
+@app.route("/get/<phonenumber>")
+def getUser(phonenumber):
+    phone = escape(phonenumber)
+    response = UH.get_user_by_phone(escape(phonenumber))
+
+    print(response)
+    return response
 
 
 # @app.route("/<name>")
@@ -50,10 +53,11 @@ def getUser():
 #                           TEST
 # --------------------------------------------------------------------
 
-@socketio.on('give me user name')
+@socketio.on('give me user information')
 def handle_testtt():
     print('message received')
-    socketio.emit('get user name', 'alireza mohammadi')
+    # json_response = UH.getLastUser()
+    socketio.emit('get user information', "amir hallaji")
     print('message sent')
 
 # --------------------------------------------------------------------
@@ -62,21 +66,14 @@ def handle_testtt():
 @socketio.on('create user')
 def handle_create_user(json_req):
 
+    # json_req = json.dumps(json_req)
+
     print(json_req)
-    return
-
-    # dictt = {
-    #     'phone_number': '333',
-    #     'password' : '123@',
-    #     'name' : 'ali',
-    #     'region' : '1',
-    #     'address' : 'velenjak',
-    # }
-
-    json_req = ''
-    # json_req = json.dumps(dictt)
 
     response = UH.create(json_req)
+
+    print(response)
+
     # print('received my event: ' + str(json_req))
     # response = {
     #     "status_code" : "200"
@@ -84,14 +81,14 @@ def handle_create_user(json_req):
     # socketio.emit('my response', response)
     # print(response)
 
-    return response
+    # return response
 
 
 @socketio.on('test_server')
 def handle_test():
-    print('test function')
-    socketio.send('message', 'amir')
-    socketio.emit('test_client', 'amir')
+    print('message received!')
+    # socketio.send('message', 'amir')
+    socketio.emit('test_client', 'hi bitch!')
 
 
 @socketio.on('message')

@@ -2,6 +2,8 @@ import json
 
 from db import *
 
+from flask_login import current_user
+
 
 def create(json_str):
     json_fields = json.loads(json_str)
@@ -34,6 +36,7 @@ def create(json_str):
         db.commit()
         close_db()
         response = "User registered successfully"
+        current_user.is_authenticated = True
         return response
 
     except sqlite3.Error:  # I'm not sure the exact error that's raised by SQLite
@@ -104,10 +107,10 @@ def delete(json_str):
         return response
 
 
-def get_user_by_phone(json_str):
-    json_fields = json.loads(json_str)
+def get_user_by_phone(entered_phone_num):
+    # json_fields = json.loads(json_str)
 
-    entered_phone_num = json_fields["phone_number"]
+    # entered_phone_num = json_fields["phone_number"]
     response = ""
     db = get_db()
     db.row_factory = sqlite3.Row
