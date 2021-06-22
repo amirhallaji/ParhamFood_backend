@@ -219,12 +219,13 @@ def handle_get_manager(json_req):
 
 @socketio.on('add food')
 def handle_add_food(json_req):
-    response = FH.addFood(json_req)
+    print('received')
+    response = FH.create_food(json_req)
     # print('received my event: ' + str(json_req))
     # response = {
     #     "status_code" : "200"
     # }
-    # socketio.emit('my response', response)
+    socketio.emit('get food from manager', json_req)
     print(response)
 
 

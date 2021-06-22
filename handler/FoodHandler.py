@@ -18,27 +18,27 @@ def create_food(json_str):
 
     cursor = db.cursor()
 
-    try:
+    # try:
 
-        cursor.execute('INSERT food (name) VALUES (?)', (food_name))
-        db.commit()
-        food_id = cursor.lastrowid
-        query = 'INSERT INTO restaurant_food(restaurant_name, food_id, count, copen_type, price, disabled)' \
-                'VALUES (?,?,?,?,?,?)'
-        fields = (restaurant_name, food_id, count, copen_type, price, disabled)
+    cursor.execute('INSERT INTO food (name) VALUES (?)', (food_name,))
+    db.commit()
+    food_id = cursor.lastrowid
+    query = 'INSERT INTO restaurant_food(restaurant_name, food_id, count, copen_type, price, disabled)' \
+            'VALUES (?,?,?,?,?,?)'
+    fields = (restaurant_name, food_id, count, copen_type, price, disabled)
 
-        cursor.execute(query, fields)
-        db.commit()
+    cursor.execute(query, fields)
+    db.commit()
 
-        close_db()
+    close_db()
 
-        response = "food registered successfully"
-        return response
+    response = "food registered successfully"
+    return response
 
-    except sqlite3.Error:
-        close_db()
-        response = "WE HAVE A PROBLEM IN DATABASE FOR FOOD REGISTRATION"
-        return response
+    # except sqlite3.Error:
+    close_db()
+    response = "WE HAVE A PROBLEM IN DATABASE FOR FOOD REGISTRATION"
+    return response
 
 
 def update_food_name(json_str):
