@@ -75,10 +75,10 @@ def update(json_str):
         return response
 
 
-def get_restaurant_by_name(json_str):
-    json_fields = json.loads(json_str)
-
-    restaurant_name = json_fields["name"]
+def get_restaurant_by_name(restaurant_name):
+    # json_fields = json.loads(json_str)
+    #
+    # restaurant_name = json_fields["name"]
 
     query = 'SELECT * FROM restaurant WHERE name=?'
     fields = (restaurant_name,)
@@ -102,10 +102,10 @@ def get_restaurant_by_name(json_str):
         return response
 
 
-def get_restaurant_by_region(json_str):
-    json_fields = json.loads(json_str)
-
-    region = json_fields["region"]
+def get_restaurant_by_region(region):
+    # json_fields = json.loads(json_str)
+    #
+    # region = json_fields["region"]
 
     query = 'SELECT * FROM restaurant WHERE region=?'
     fields = (region,)
@@ -129,9 +129,9 @@ def get_restaurant_by_region(json_str):
         return response
 
 
-def delete(json_str):
-    json_fields = json.loads(json_str)
-    restaurant_name = json_fields["restaurant_name"]
+def delete(restaurant_name):
+    # json_fields = json.loads(json_str)
+    # restaurant_name = json_fields["restaurant_name"]
 
     query = 'DELETE restaurant WHERE name=?'
     fields = (restaurant_name,)

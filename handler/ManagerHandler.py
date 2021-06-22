@@ -63,10 +63,10 @@ def update(json_str):
         response = "A PROBLEM ACCRUED IN MANAGER UPDATE"
 
 
-def get_by_email(json_str):
-    json_fields = json.loads(json_str)
+def get_by_email(entered_email):
+    # json_fields = json.loads(json_str)
 
-    entered_email = json_fields["email"]
+    # entered_email = json_fields["email"]
     response = ""
     db = get_db()
     db.row_factory = sqlite3.Row
@@ -89,10 +89,10 @@ def get_by_email(json_str):
         return
 
 
-def get_related_comments(json_str):
-    json_fields = json.loads(json_str)
-
-    email = json_fields["email"]
+def get_related_comments(email):
+    # json_fields = json.loads(json_str)
+    #
+    # email = json_fields["email"]
 
     query = 'SELECT score, content, manager_reply FROM comment INNER JOIN f_order' \
             'ON f_order.id = comment.order_id INNER JOIN restaurant' \
@@ -117,26 +117,6 @@ def get_related_comments(json_str):
         close_db()
         response = "WE HAVE A PROBLEM IN DATABASE FOR COMMENT GETTING BY MANAGER email"
         return response
-
-
-def addFood(json):
-    pass
-
-
-def removeFood(json):
-    pass
-
-
-def disableFood(json):
-    pass
-
-
-#def acceptOrder(json):
-#    pass
-
-
-#def replyToComment(json):
- #   pass
 
 
 def get_manager_by_email(email, cursor):

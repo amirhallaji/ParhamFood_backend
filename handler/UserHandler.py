@@ -77,9 +77,9 @@ def update(json_str):
         response = "WE HAVE A PROBLEM IN DATABASE FOR USER UPDATE DATA"
 
 
-def delete(json_str):
-    json_fields = json.loads(json_str)
-    phone_number = json_fields["phone_number"]
+def delete(phone_number):
+    # json_fields = json.loads(json_str)
+    # phone_number = json_fields["phone_number"]
 
     query = 'DELETE user WHERE phone_number=?'
     fields = (phone_number,)
@@ -104,10 +104,10 @@ def delete(json_str):
         return response
 
 
-def get_user_by_phone(json_str):
-    json_fields = json.loads(json_str)
-
-    entered_phone_num = json_fields["phone_number"]
+def get_user_by_phone(entered_phone_num):
+    # json_fields = json.loads(json_str)
+    #
+    # entered_phone_num = json_fields["phone_number"]
     response = ""
     db = get_db()
     db.row_factory = sqlite3.Row
@@ -160,9 +160,9 @@ def submit_order(json_str):
         return response
 
 
-def get_favorite_foods_list(json_str):
-    json_fields = json.loads(json_str)
-    user_phone_number = json_fields["phone_number"]
+def get_favorite_foods_list(user_phone_number):
+    # json_fields = json.loads(json_str)
+    # user_phone_number = json_fields["phone_number"]
 
     get_favorites_query = 'SELECT food.name, f_order.restaurant_name FROM' \
                           'comment INNER JOIN f_order ON comment.order_id = f_order.id' \
@@ -186,9 +186,9 @@ def get_favorite_foods_list(json_str):
         return response
 
 
-def get_orders_history(json_str):
-    json_fields = json.loads(json_str)
-    user_phone_number = json_fields["phone_number"]
+def get_orders_history(user_phone_number):
+    # json_fields = json.loads(json_str)
+    # user_phone_number = json_fields["phone_number"]
 
     order_select_query = 'SELECT f_order.id, food.name, f_order.restaurant_name, f_order.count, f_order.status, ' \
                          'f_order.date' \

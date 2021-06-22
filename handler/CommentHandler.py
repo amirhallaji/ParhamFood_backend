@@ -87,10 +87,10 @@ def update_by_manager(json_str):
         return response
 
 
-def get_by_order_id(json_str):
-    json_fields = json.loads(json_str)
-
-    order_id = json_fields["order_id"]
+def get_by_order_id(order_id):
+    # json_fields = json.loads(json_str)
+    #
+    # order_id = json_fields["order_id"]
 
     query = 'SELECT score, content, manager_reply FROM comment WHERE order_id=?'
     fields = (order_id,)
@@ -114,9 +114,9 @@ def get_by_order_id(json_str):
         return response
 
 
-def delete(json_str):
-    json_fields = json.loads(json_str)
-    order_id = json_fields["order_id"]
+def delete(order_id):
+    # json_fields = json.loads(json_str)
+    # order_id = json_fields["order_id"]
 
     query = 'DELETE comment WHERE order_id=?'
     fields = (order_id,)

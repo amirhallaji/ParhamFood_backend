@@ -134,10 +134,10 @@ def get_by_food_restaurant(json_str):
         return response
 
 
-def get_by_food(json_str):
-    json_fields = json.loads(json_str)
-
-    food_name = json_fields["food_name"]
+def get_by_food_name(food_name):
+    # json_fields = json.loads(json_str)
+    #
+    # food_name = json_fields["food_name"]
 
     query = 'SELECT food_id, food.name, restaurant_name, count, copen_type, price, disabled' \
             'FROM food_restaurant INNER JOIN ON food.id = food_restaurant.food_id' \
@@ -163,10 +163,10 @@ def get_by_food(json_str):
         return response
 
 
-def get_by_restaurant(json_str):
-    json_fields = json.loads(json_str)
-
-    restaurant_name = json_fields["restaurant_name"]
+def get_by_restaurant(restaurant_name):
+    # json_fields = json.loads(json_str)
+    #
+    # restaurant_name = json_fields["restaurant_name"]
 
     query = 'SELECT food_id, food.name, restaurant_name, count, copen_type, price, disabled' \
             'FROM food_restaurant INNER JOIN ON food.id = food_restaurant.food_id' \
@@ -192,10 +192,10 @@ def get_by_restaurant(json_str):
         return response
 
 
-def delete_food(json_str):
-    json_fields = json.loads(json_str)
-
-    food_id = json_fields["food_id"]
+def delete_food(food_id):
+    # json_fields = json.loads(json_str)
+    #
+    # food_id = json_fields["food_id"]
 
     query = 'DELETE food WHERE id=?'
     fields = (food_id, )
