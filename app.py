@@ -10,6 +10,8 @@ import json
 import handler.ManagerHandler as MH
 import handler.UserHandler as UH
 import handler.RestaurantHandler as RH
+import handler.FoodHandler as FH
+import handler.CommentHandler as CH
 import db as db
 
 
@@ -214,12 +216,14 @@ def handle_get_manager(json_req):
 
 @socketio.on('add food')
 def handle_add_food(json_req):
-    response = MH.addFood(json_req)
+    print("here")
+    response = FH.create_food(json_req)
     # print('received my event: ' + str(json_req))
     # response = {
     #     "status_code" : "200"
     # }
-    socketio.emit('my response', response)
+    socketio.emit('get food from manager', json_req)
+    print(response)
 
 
 @socketio.on('remove food')
