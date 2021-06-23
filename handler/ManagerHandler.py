@@ -1,4 +1,5 @@
 import json
+import re
 
 from db import *
 
@@ -9,6 +10,13 @@ def create(json_str):
     email = json_fields["email"]
     password = json_fields["password"]
     name = json_fields["name"]
+    confirm_password = json_fields["confirm_password"]
+
+    if len(password) < 8 or not re.search("[a-z0-9]", password):
+        return 'bad password'
+
+    if password != confirm_password:
+        return 'confirm password error'
 
     query = 'INSERT INTO manager (email, password, name) ' \
             'VALUES (?, ?, ?)'
@@ -21,16 +29,18 @@ def create(json_str):
     try:
         if len(get_manager_by_email(email, cursor)) != 0:
             response = "MANAGER ALREADY EXISTS!"
-            return
+            return 'rep'
 
         cursor.execute(query, fields)
         db.commit()
         close_db()
-        response = "Manager registered successfully"
+        response = "User registered successfully"
+        return response
 
     except sqlite3.IntegrityError:  # I'm not sure the exact error that's raised by SQLite
         close_db()
         response = "A PROBLEM ACCRUED IN MANAGER CREATION"
+        return None
 
 
 def update(json_str):
@@ -76,6 +86,7 @@ def get_by_email(entered_email):
         manager_rows = get_manager_by_email(entered_email, cursor)
         if len(manager_rows) == 0:
             response = "MANAGER NOT EXIST !!!!"
+            return None
         manager_row = manager_rows[0]
 
         manager_row_dict = dict(manager_row)

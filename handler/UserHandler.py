@@ -1,5 +1,5 @@
 import json
-
+import re
 from db import *
 
 
@@ -8,10 +8,17 @@ def create(json_str):
 
     phone_number = json_fields["phone_number"]
     password = json_fields["password"]
+    confirm_password = json_fields["confirm_password"]
     name = json_fields["name"]
     region = json_fields["region"]
     address = json_fields["address"]
     credit = 1000000  # 1,000,000
+
+    if len(password) < 8 or not re.search("[a-z0-9]", password):
+        return 'bad password'
+
+    if password != confirm_password:
+        return 'confirm password error'
 
     insert_query = 'INSERT INTO user (phone_number, password, name, region, address, credit) ' \
                    'VALUES (?, ?, ?, ?, ?, ?)'
@@ -27,7 +34,7 @@ def create(json_str):
         # checking to find out user not repetitive
         if len(get_user_by_phone_cursor(phone_number, cursor)) != 0:
             response = "USER ALREADY EXISTS !!!"
-            return 'Error'
+            return 'rep'
 
         # insert user
         cursor.execute(insert_query, fields)
@@ -39,7 +46,7 @@ def create(json_str):
     except sqlite3.Error:  # I'm not sure the exact error that's raised by SQLite
         close_db()
         response = "WE HAVE A PROBLEM IN DATABASE FOR USER REGISTRATION"
-        return response
+        return None
 
 
 def update(json_str):
@@ -117,6 +124,8 @@ def get_user_by_phone(entered_phone_num):
         user_rows = get_user_by_phone_cursor(entered_phone_num, cursor)
         if len(user_rows) == 0:
             response = "USER NOT EXIST !!!!"
+            return None
+
         user_row = user_rows[0]
 
         user_row_dict = dict(user_row)
@@ -127,7 +136,7 @@ def get_user_by_phone(entered_phone_num):
     except sqlite3.Error:
         close_db()
         response = "WE HAVE A PROBLEM IN DATABASE FOR USER GET DATA"
-        return response
+        return None
 
 
 def submit_order(json_str):

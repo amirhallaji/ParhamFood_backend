@@ -38,10 +38,10 @@ def createUser():
     res = handle_create_user()
     return res
 
-@app.route("/get")
-def getUser():
-    res = handle_get_user()
-    return res
+@app.route("/get/<phone_number>")
+def getUser(phone_number):
+    res = UH.get_user_by_phone(escape(phone_number))
+    return "None" if res is None else res
 
 
 # @app.route("/<name>")
@@ -58,33 +58,33 @@ def handle_testtt():
     socketio.emit('get user name', 'alireza mohammadi')
     print('message sent')
 
+
 # --------------------------------------------------------------------
 #                           USER EVENTS
 # --------------------------------------------------------------------
 @socketio.on('create user')
 def handle_create_user(json_req):
 
-    print(json_req)
-    return
-
-    # dictt = {
-    #     'phone_number': '333',
-    #     'password' : '123@',
-    #     'name' : 'ali',
-    #     'region' : '1',
-    #     'address' : 'velenjak',
-    # }
-
-    json_req = ''
-    # json_req = json.dumps(dictt)
-
     response = UH.create(json_req)
-    # print('received my event: ' + str(json_req))
-    # response = {
-    #     "status_code" : "200"
-    # }
     # socketio.emit('my response', response)
     # print(response)
+
+    print(response)
+
+    if response == 'confirm password error':
+        socketio.emit('u confirm password error', 1)
+
+    elif response == 'bad password':
+        socketio.emit('u bad password', 1)
+
+    elif response == 'rep':
+        socketio.emit('u rep', 1)
+
+    elif response == 'User registered successfully':
+        socketio.emit('user registered', 1)
+
+    else:
+        socketio.emit('u bad req', 1)
 
     return response
 
@@ -94,6 +94,27 @@ def handle_test():
     print('test function')
     socketio.send('message', 'amir')
     socketio.emit('test_client', 'amir')
+
+
+@socketio.on('login user')
+def some_func(json_req):
+
+    json_dict = json.loads(json_req)
+    phone_number = json_dict["phone_number"]
+    print('phone_number:', phone_number)
+    print('type(phone_number):', type(phone_number))
+    answer = UH.get_user_by_phone(phone_number)
+
+    print(answer)
+
+    wrong_pass = False
+
+    if answer is not None:
+        answer_dict = json.loads(answer)
+        wrong_pass = answer_dict['password'] != json_dict['password']
+
+    socketio.emit('user found', ('0' if answer is None else ('wrong pass' if wrong_pass else '1')))
+
 
 
 @socketio.on('message')
@@ -189,12 +210,47 @@ def handle_get_orders_history(json_req):
 # --------------------------------------------------------------------
 @socketio.on('create manager')
 def handle_create_manager(json_req):
+
     response = MH.create(json_req)
-    # print('received my event: ' + str(json_req))
-    # response = {
-    #     "status_code" : "200"
-    # }
-    socketio.emit('my response', response)
+    # socketio.emit('my response', response)
+    # print(response)
+
+    print(response)
+
+    if response == 'confirm password error':
+        socketio.emit('m confirm password error', 1)
+
+    elif response == 'bad password':
+        socketio.emit('m bad password', 1)
+
+    elif response == 'rep':
+        socketio.emit('m rep', 1)
+
+    elif response == 'Manager registered successfully':
+        socketio.emit('manager registered', 1)
+
+    else:
+        socketio.emit('m bad req', 1)
+
+    return response
+
+
+@socketio.on('login manager')
+def some_func2(json_req):
+
+    json_dict = json.loads(json_req)
+    email = json_dict["email"]
+    answer = MH.get_by_email(email)
+
+    print(answer)
+
+    wrong_pass = False
+
+    if answer is not None:
+        answer_dict = json.loads(answer)
+        wrong_pass = answer_dict['password'] != json_dict['password']
+
+    socketio.emit('manager found', ('0' if answer is None else ('wrong pass' if wrong_pass else '1')))
 
 
 @socketio.on('update manager')
