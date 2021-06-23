@@ -313,6 +313,18 @@ def handle_accept_order(json_req):
     # }
     socketio.emit('my response', response)
 
+@socketio.on('start status ctr')
+def handle_masmali():
+    print("hereeeeeeeeeee")
+    import time
+    socketio.emit('status', 'در انتظار تایید رستوران')
+    time.sleep(10)
+    socketio.emit('status', 'در حال آماده سازی')
+    time.sleep(10)
+    socketio.emit('status', 'در حال ارسال توسط پیک')
+    time.sleep(10)
+    socketio.emit('status', 'تحویل داده شده')
+
 
 @socketio.on('reply to comment')
 def handle_reply_to_comment(json_req):
